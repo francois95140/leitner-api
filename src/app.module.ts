@@ -8,8 +8,12 @@ import { CardEntity } from './card/infrastructure/persistence/entities/Card.enti
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: 'db.sqlite',
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      username: 'leitner',
+      password: 'leitner',
+      database: 'leitner',
       entities: [CardEntity],
       synchronize: true, // Auto-create tables (dev only)
     }),
