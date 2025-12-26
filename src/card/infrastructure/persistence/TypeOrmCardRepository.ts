@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { CardRepository } from '../../domain/CardRepository';
 import { Card } from '../../domain/Card';
 import { CardEntity } from './entities/Card.entity';
@@ -20,12 +20,17 @@ export class TypeOrmCardRepository implements CardRepository {
         entity.answer = card.answer;
         entity.tag = card.tag;
         entity.category = card.category;
+        entity.nextQuizzDate = card.nextQuizzDate;
 
         await this.repository.save(entity);
     }
 
-    async findAll(): Promise<Card[]> {
-        const entities = await this.repository.find();
+    async findAll(tags?: string[]): Promise<Card[]> {
+        let where = {};
+        if (tags && tags.length > 0) {
+            where = { tag: In(tags) };
+        }
+        const entities = await this.repository.find({ where });
         return entities.map(this.toDomain);
     }
 
@@ -36,6 +41,7 @@ export class TypeOrmCardRepository implements CardRepository {
             entity.answer,
             entity.tag,
             entity.category as Category,
+            entity.nextQuizzDate,
         );
     }
 }

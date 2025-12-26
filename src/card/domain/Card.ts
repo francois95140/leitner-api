@@ -7,9 +7,12 @@ export class Card {
         public readonly answer: string,
         public readonly tag: string,
         public readonly category: Category = Category.FIRST,
+        public readonly nextQuizzDate: Date,
     ) { }
 
     static create(id: string, question: string, answer: string, tag: string): Card {
-        return new Card(id, question, answer, tag, Category.FIRST);
+        const nextQuizzDate = new Date();
+        nextQuizzDate.setDate(nextQuizzDate.getDate() + 1);
+        return new Card(id, question, answer, tag, Category.FIRST, nextQuizzDate);
     }
 }
