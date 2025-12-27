@@ -20,4 +20,7 @@ export class CardEntity {
         default: Category.FIRST,
     })
     category: string;
+
+    @Column({ type: 'timestamp', nullable: true })
+    nextQuizzDate: Date | null;
 }
