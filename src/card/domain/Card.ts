@@ -18,7 +18,7 @@ export class Card {
 
     answer(isValid: boolean): Card {
         const frequencyMap: Record<Category, number> = {
-            [Category.FIRST]: 1,
+            [Category.FIRST]: 0,
             [Category.SECOND]: 2,
             [Category.THIRD]: 4,
             [Category.FOURTH]: 8,

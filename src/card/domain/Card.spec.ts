@@ -3,19 +3,18 @@ import { Category } from './Category';
 
 describe('Card Domain Entity', () => {
 
-    it('should create a card with Category FIRST and nextQuizzDate tomorrow', () => {
+    it('should create a card with Category FIRST and nextQuizzDate today (Immediate Retry)', () => {
         const card = Card.create('id-1', 'Question?', 'Answer', 'Tag');
 
         expect(card.category).toBe(Category.FIRST);
 
         const now = new Date();
-        const tomorrow = new Date(now);
-        tomorrow.setDate(now.getDate() + 1);
+        // Delay is 0, so should be approx now (or slightly in future depending on implementation details, but same day)
+        // With current logic: now + 0 days = now.
 
-        // Approximate comparison to avoid millisecond flakiness
         expect(card.nextQuizzDate).not.toBeNull();
         if (card.nextQuizzDate) {
-            const diff = Math.abs(card.nextQuizzDate.getTime() - tomorrow.getTime());
+            const diff = Math.abs(card.nextQuizzDate.getTime() - now.getTime());
             expect(diff).toBeLessThan(1000); // Less than 1 second diff
         }
     });
@@ -67,12 +66,11 @@ describe('Card Domain Entity', () => {
         expect(updatedCard.category).toBe(Category.FIRST);
 
         const now = new Date();
-        const tomorrow = new Date(now);
-        tomorrow.setDate(now.getDate() + 1);
+        // Delay 0 => Immediate retry
 
         expect(updatedCard.nextQuizzDate).not.toBeNull();
         if (updatedCard.nextQuizzDate) {
-            const diff = Math.abs(updatedCard.nextQuizzDate.getTime() - tomorrow.getTime());
+            const diff = Math.abs(updatedCard.nextQuizzDate.getTime() - now.getTime());
             expect(diff).toBeLessThan(1000);
         }
     });
