@@ -1,6 +1,8 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query, HttpCode } from '@nestjs/common';
 import { CreateCardUseCase } from '../../application/CreateCard.usecase';
 import { GetCardsUseCase } from '../../application/GetCards.usecase';
+import { GetQuizzCardsUseCase } from '../../application/GetQuizzCards.usecase';
+import { AnswerCardUseCase } from '../../application/AnswerCard.usecase';
 import { CreateCardDto } from '../../application/dto/CreateCard.dto';
 import { Card } from '../../domain/Card';
 
@@ -9,11 +11,24 @@ export class CardController {
     constructor(
         private readonly createCardUseCase: CreateCardUseCase,
         private readonly getCardsUseCase: GetCardsUseCase,
+        private readonly getQuizzCardsUseCase: GetQuizzCardsUseCase,
+        private readonly answerCardUseCase: AnswerCardUseCase,
     ) { }
 
     @Post()
     async create(@Body() createCardDto: CreateCardDto): Promise<Card> {
         return this.createCardUseCase.execute(createCardDto);
+    }
+
+    @Patch(':cardId/answer')
+    @HttpCode(204)
+    async answer(@Param('cardId') cardId: string, @Body() body: { isValid: boolean }): Promise<void> {
+        return this.answerCardUseCase.execute(cardId, body.isValid);
+    }
+
+    @Get('quizz')
+    async getQuizz(@Query('date') date: string): Promise<Card[]> {
+        return this.getQuizzCardsUseCase.execute(date);
     }
 
     @Get()

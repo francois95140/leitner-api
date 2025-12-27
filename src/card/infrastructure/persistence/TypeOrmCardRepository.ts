@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, In } from 'typeorm';
+import { Repository, In, LessThanOrEqual } from 'typeorm';
 import { CardRepository } from '../../domain/CardRepository';
 import { Card } from '../../domain/Card';
 import { CardEntity } from './entities/Card.entity';
@@ -17,7 +17,7 @@ export class TypeOrmCardRepository implements CardRepository {
         const entity = new CardEntity();
         entity.id = card.id;
         entity.question = card.question;
-        entity.answer = card.answer;
+        entity.answer = card.answerString;
         entity.tag = card.tag;
         entity.category = card.category;
         entity.nextQuizzDate = card.nextQuizzDate;
@@ -32,6 +32,23 @@ export class TypeOrmCardRepository implements CardRepository {
         }
         const entities = await this.repository.find({ where });
         return entities.map(this.toDomain);
+    }
+
+    async findByDate(date: Date): Promise<Card[]> {
+        const entities = await this.repository.find({
+            where: {
+                nextQuizzDate: LessThanOrEqual(date),
+            },
+        });
+        return entities.map(this.toDomain);
+    }
+
+    async findById(cardId: string): Promise<Card | undefined> {
+        const entity = await this.repository.findOne({ where: { id: cardId } });
+        if (!entity) {
+            return undefined;
+        }
+        return this.toDomain(entity);
     }
 
     private toDomain(entity: CardEntity): Card {

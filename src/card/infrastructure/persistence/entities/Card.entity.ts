@@ -22,5 +22,5 @@ export class CardEntity {
     category: string;
 
     @Column({ type: 'timestamp', nullable: true })
-    nextQuizzDate: Date;
+    nextQuizzDate: Date | null;
 }
