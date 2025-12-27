@@ -10,10 +10,7 @@ export class GetQuizzCardsUseCase {
 
     async execute(dateString?: string): Promise<Card[]> {
         const date = dateString ? new Date(dateString) : new Date();
-
-        if (dateString) {
-            date.setHours(23, 59, 59, 999);
-        }
+        date.setHours(23, 59, 59, 999);
 
         return this.cardRepository.findByDate(date);
     }
