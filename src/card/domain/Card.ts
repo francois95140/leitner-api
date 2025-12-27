@@ -12,7 +12,7 @@ export class Card {
 
     static create(id: string, question: string, answerString: string, tag: string): Card {
         const nextQuizzDate = new Date();
-        nextQuizzDate.setDate(nextQuizzDate.getDate() + 1);
+        nextQuizzDate.setDate(nextQuizzDate.getDate());
         return new Card(id, question, answerString, tag, Category.FIRST, nextQuizzDate);
     }
 
