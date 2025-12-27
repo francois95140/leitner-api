@@ -5,7 +5,7 @@ import { GetQuizzCardsUseCase } from '../../application/GetQuizzCards.usecase';
 import { AnswerCardUseCase } from '../../application/AnswerCard.usecase';
 import { CreateCardDto } from '../../application/dto/CreateCard.dto';
 import { Card } from '../../domain/Card';
-import { FakeAuthGuard } from '../../../common/guards/FakeAuthGuard';
+import { FakeAuthGuard } from '../../../common/guards/AuthGuard';
 
 @Controller('cards')
 @UseGuards(FakeAuthGuard)
